@@ -8,7 +8,9 @@ export default function Layout() {
     <div className="layout">
       <h2 className="page-title">Price Analysis</h2>
       <main>
-        <LineChart />
+        <div className="card">
+          <LineChart />
+        </div>
 
         <div style={{ display: "grid", gap: "1rem" }}>
           <ProductsSidebar />

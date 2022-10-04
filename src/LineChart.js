@@ -16,6 +16,7 @@ export function LineChart(props) {
   let [ref, bounds] = useMeasure();
   let width = bounds.width;
   let height = bounds.height;
+  console.log({ width, height });
 
   useEffect(() => {
     const _data = iphoneData;
@@ -46,19 +47,23 @@ export function LineChart(props) {
     setTicks(_ticks);
     result = Object.values(result);
     setData(result);
-    console.log(result);
   }, []);
 
   if (!data.length) return;
   return (
     <div
-      className="line-chart card"
-      style={{ width: "100%", height: "450px" }}
-      {...props}
       ref={ref}
+      className="line-chart"
+      style={{
+        maxWidth: "100%",
+        height: "500px",
+        maxHeight: "75vh",
+        overflow: "hidden",
+      }}
+      {...props}
     >
       <ChartInner
-        key={width}
+        // ref={ref}
         selectedShop={selectedShop}
         data={data}
         width={width}
@@ -109,74 +114,70 @@ function ChartInner({ data, selectedShop, width, height }) {
   let d = line(data);
 
   return (
-    <>
-      <svg
-        onMouseLeave={() => setSelectedDate([])}
-        className="chart-inner"
-        viewBox={`0 0 ${width} ${height}`}
-      >
-        <path
-          d={d}
-          fill="none"
-          stroke="rgb(0, 122, 255)"
-          strokeWidth={2}
-        ></path>
+    <svg
+      style={{
+        maxWidth: "100%",
+      }}
+      onMouseLeave={() => setSelectedDate([])}
+      className="chart-inner"
+      viewBox={`0 0 ${width} ${height}`}
+    >
+      <path d={d} fill="none" stroke="rgb(0, 122, 255)" strokeWidth={2}></path>
 
-        {/* Y Axis */}
-        {yScale.ticks().map(price => (
-          <g transform={`translate(0, ${yScale(price)})`}>
-            <line
-              x1={margin.left}
-              x2={width - margin.right}
-              stroke="#999"
-              strokeWidth={0.5}
-              strokeDasharray="1,3"
-            />
+      {/* Y Axis */}
+      {yScale.ticks().map(price => (
+        <g transform={`translate(0, ${yScale(price)})`}>
+          <line
+            x1={margin.left}
+            x2={width - margin.right}
+            stroke="#999"
+            strokeWidth={0.5}
+            strokeDasharray="1,3"
+          />
+          <text
+            alignmentBaseline="middle"
+            key={price}
+            fill="#999"
+            fontSize={10}
+          >
+            {price}
+          </text>
+        </g>
+      ))}
+
+      {xTicks.map((date, i) => (
+        <g transform={`translate(${xScale(date)}, 0)`}>
+          <rect
+            width={xScale(addDays(date, 1)) - xScale(date)}
+            height={height}
+            opacity={selectedDate.includes(i) ? 0.05 : 0}
+            onMouseDown={e => {
+              setSelectedDate([i]);
+            }}
+            onMouseEnter={e => {
+              if (e.buttons) {
+                setSelectedDate(prev => prev.concat(i));
+              }
+            }}
+            onMouseUp={() => {
+              setStartDay(xTicks.at(selectedDate[0]));
+              setEndDay(addDays(xTicks.at(selectedDate.at(-1)), 1));
+              setSelectedDate([]);
+            }}
+          />
+          {date.getDate() % 2 === 1 && (
             <text
-              alignmentBaseline="middle"
-              key={price}
+              y={height}
+              alignmentBaseline="bottom"
+              key={date}
               fill="#999"
               fontSize={10}
             >
-              {price}
+              {date.getDate() === 1 ? format(date, "MMM") : format(date, "d")}
             </text>
-          </g>
-        ))}
-
-        {xTicks.map((date, i) => (
-          <g transform={`translate(${xScale(date)}, 0)`}>
-            <rect
-              width={xScale(addDays(date, 1)) - xScale(date)}
-              height={width}
-              opacity={selectedDate.includes(i) ? 0.05 : 0}
-              onMouseDown={e => {
-                setSelectedDate([i]);
-              }}
-              onMouseEnter={e => {
-                if (e.buttons) {
-                  setSelectedDate(prev => prev.concat(i));
-                }
-              }}
-              onMouseUp={() => {
-                setStartDay(xTicks.at(selectedDate[0]));
-                setEndDay(addDays(xTicks.at(selectedDate.at(-1)), 1));
-                setSelectedDate([]);
-              }}
-            />
-            {date.getDate() % 2 === 1 && (
-              <text
-                y={height}
-                alignmentBaseline="bottom"
-                key={date}
-                fill="#999"
-                fontSize={10}
-              >
-                {date.getDate() === 1 ? format(date, "MMM") : format(date, "d")}
-              </text>
-            )}
-          </g>
-        ))}
-      </svg>
-    </>
+          )}
+        </g>
+      ))}
+    </svg>
   );
 }

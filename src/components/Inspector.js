@@ -10,7 +10,6 @@ export default function Inspector() {
       <h3>Inspector</h3>
       <Notifications />
       <Rankings />
-      <Shops />
     </div>
   );
 }
@@ -20,10 +19,6 @@ function Notifications() {
 }
 
 function Rankings() {
-  return <div className="rankings">Rankings</div>;
-}
-
-function Shops() {
   const selectedProduct = useRecoilValue(SelectedProductAtom);
   const [selectedShop, setSelectedShop] = useRecoilState(SelectedShopAtom);
   const [productShops, setProductShops] = useState(null);
@@ -38,12 +33,14 @@ function Shops() {
       });
 
       return stop;
+    } else {
+      setProductShops(null);
     }
   }, [selectedProduct]);
 
   return (
     <div className="shops">
-      Shops
+      Rankings
       {productShops?.map(s => (
         <button
           className={`selectable ${selectedShop === s ? "selected" : ""}`}

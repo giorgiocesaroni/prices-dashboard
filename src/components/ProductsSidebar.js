@@ -19,6 +19,14 @@ export function ProductsSidebar() {
     setProductNames(collection.docs.map(d => d.id));
   }
 
+  function handleClick(product) {
+    if (selectedProduct === product) {
+      return setSelectedProduct(null);
+    }
+
+    setSelectedProduct(product);
+  }
+
   return (
     <div className="card products-sidebar">
       <h3>Products Sidebar</h3>
@@ -26,7 +34,7 @@ export function ProductsSidebar() {
         <button
           className={`selectable ${selectedProduct === p ? "selected" : ""}`}
           key={p}
-          onClick={() => setSelectedProduct(p)}
+          onClick={() => handleClick(p)}
         >
           {p}
         </button>
