@@ -1,0 +1,82 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: #eee;
+  padding: 1rem;
+}
+
+body {
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.App {
+  background: white;
+}
+
+h1,
+h2 {
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  margin-bottom: 1rem;
+}
+
+button {
+  border: none;
+}
+
+/* Utility */
+.border {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+/* Components */
+.selectable {
+  font-size: 12px;
+  background: #eee;
+  color: #999;
+  background-color: #eee;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.selectable.selected {
+  background: rgb(0, 122, 255);
+  color: white;
+}
+
+.layout main {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+}
+
+.card {
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.products-sidebar {
+}
+
+.line-chart {
+}
+
+.inspector {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.inspector > * {
+  display: grid;
+  gap: 0.5rem;
+}
