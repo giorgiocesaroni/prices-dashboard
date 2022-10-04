@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/prices-dashboard/static/css/main.1364853f.css",
+    "main.js": "/prices-dashboard/static/js/main.48348642.js",
+    "index.html": "/prices-dashboard/index.html",
+    "main.1364853f.css.map": "/prices-dashboard/static/css/main.1364853f.css.map",
+    "main.48348642.js.map": "/prices-dashboard/static/js/main.48348642.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1364853f.css",
+    "static/js/main.48348642.js"
+  ]
+}
