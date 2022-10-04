@@ -29,7 +29,7 @@ export function ProductsSidebar() {
 
   return (
     <div className="card products-sidebar">
-      <h3>Products Sidebar</h3>
+      <h3>Products</h3>
       {productNames.map(p => (
         <button
           className={`selectable ${selectedProduct === p ? "selected" : ""}`}
