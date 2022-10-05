@@ -70,7 +70,8 @@ export function LineChart() {
       style={{
         maxWidth: "100%",
         height: "500px",
-        maxHeight: "75vh",
+        maxHeight: "65vh",
+        minHeight: "65vh",
         overflow: "hidden",
       }}
     >
