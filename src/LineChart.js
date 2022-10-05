@@ -29,7 +29,9 @@ export function LineChart() {
     let minDates = [];
     let maxDates = [];
 
+    console.log({ selectedShops, productHistoricalData });
     for (let shop of selectedShops.map(s => productHistoricalData[s])) {
+      console.log(shop);
       let _minPrice = Math.min(...shop.historicalData.map(d => d.price));
       let _maxPrice = Math.max(...shop.historicalData.map(d => d.price));
 
@@ -90,8 +92,18 @@ export function LineChart() {
 function ChartInner({ lines, width, height, domain }) {
   console.log({ domain });
   const [selectedDate, setSelectedDate] = useState([]);
+
+  const [minPrice, setMinPrice] = useState(domain.y[0]);
+  const [maxPrice, setMaxPrice] = useState(domain.y[1]);
+
+  useEffect(() => {
+    setMinPrice(domain.y[0]);
+    setMaxPrice(domain.y[1]);
+  }, [domain]);
+
   const [startDay, setStartDay] = useState(startOfMonth(domain.x[0]));
   const [endDay, setEndDay] = useState(endOfMonth(domain.x[1]));
+
   console.log({ startDay, endDay });
   console.log({ domain });
 
@@ -111,7 +123,7 @@ function ChartInner({ lines, width, height, domain }) {
 
   let yScale = d3
     .scaleLinear()
-    .domain(domain.y)
+    .domain([minPrice, maxPrice])
     .range([height - margin.bottom, margin.top]);
 
   // Inverting the y axis

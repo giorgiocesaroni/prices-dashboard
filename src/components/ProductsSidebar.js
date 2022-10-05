@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   AvailableProductsAtom,
@@ -8,8 +9,19 @@ export function ProductsSidebar() {
   const [availableProducts] = useRecoilState(AvailableProductsAtom);
   const [selectedProduct, setSelectedProduct] =
     useRecoilState(SelectedProductAtom);
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState(null);
 
-  console.log({ availableProducts });
+  useEffect(() => {
+    setFilteredProducts(null);
+    if (!searchValue) return;
+
+    setFilteredProducts(
+      availableProducts.filter(p =>
+        p.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    );
+  }, [searchValue]);
 
   return (
     <div
@@ -17,7 +29,13 @@ export function ProductsSidebar() {
       style={{ display: "grid", gap: ".5rem" }}
     >
       <h3>Products</h3>
-      {availableProducts?.map(p => (
+      <input
+        value={searchValue}
+        onChange={e => setSearchValue(e.target.value)}
+        className="search-bar"
+        placeholder="Search products"
+      />
+      {filteredProducts?.map(p => (
         <button
           onClick={() => setSelectedProduct(p)}
           className={`selectable ${selectedProduct === p ? "selected" : ""}`}

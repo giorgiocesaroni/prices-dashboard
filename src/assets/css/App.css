@@ -87,3 +87,12 @@ button {
   display: grid;
   gap: 0.5rem;
 }
+
+.search-bar {
+  border: none;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: #eee;
+  margin-bottom: 1rem;
+}

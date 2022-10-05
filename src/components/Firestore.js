@@ -73,6 +73,7 @@ export default function Firestore({ children }) {
       setProductHistoricalData(result);
 
       setAvailableShops(_availableShops);
+      setSelectedShops(_availableShops.slice(0, 10).map(s => s.shopName));
     });
 
     return stop;
