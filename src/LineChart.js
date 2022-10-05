@@ -101,8 +101,8 @@ function ChartInner({ lines, width, height, domain }) {
     setMaxPrice(domain.y[1]);
   }, [domain]);
 
-  const [startDay, setStartDay] = useState(startOfMonth(domain.x[0]));
-  const [endDay, setEndDay] = useState(endOfMonth(domain.x[1]));
+  const [startDay, setStartDay] = useState(domain.x[0]);
+  const [endDay, setEndDay] = useState(domain.x[1]);
 
   console.log({ startDay, endDay });
   console.log({ domain });
