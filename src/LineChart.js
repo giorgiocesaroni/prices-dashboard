@@ -1,62 +1,66 @@
 import * as d3 from "d3";
-import { addDays, format, parse } from "date-fns";
-import React, { useEffect, useRef, useState } from "react";
+import { addDays, format } from "date-fns";
+import React, { useEffect, useState } from "react";
 import useMeasure from "react-use-measure";
 
 import { eachDayOfInterval, endOfMonth, startOfMonth } from "date-fns/esm";
 import { useRecoilValue } from "recoil";
-import { ProductDataAtom } from "./context/recoil/atoms";
+import {
+  ProductHistoricalData,
+  SelectedShopsAtom,
+} from "./context/recoil/atoms";
 
 export function LineChart() {
-  const [data, setData] = useState([]);
-  const [shops, setShops] = useState([]);
-  const [selectedShop, setSelectedShop] = useState("Amazon.it");
-  const [ticks, setTicks] = useState([]);
-  const innerRef = useRef(null);
-
-  const productData = useRecoilValue(ProductDataAtom);
+  const selectedShops = useRecoilValue(SelectedShopsAtom);
+  const productHistoricalData = useRecoilValue(ProductHistoricalData);
+  const [domain, setDomain] = useState(null);
 
   let [ref, bounds] = useMeasure();
   let width = bounds.width;
   let height = bounds.height;
-  console.log({ width, height });
 
+  // At load, compute domain
   useEffect(() => {
-    const _data = productData;
-    if (!productData) return;
+    if (!selectedShops?.length) return;
 
-    console.log({ productData });
+    let minPrices = [];
+    let maxPrices = [];
 
-    const _shops = Array.from(new Set(_data?.map(e => e["shop_name"]))).sort();
-    setShops(_shops);
+    let minDates = [];
+    let maxDates = [];
 
-    const _analyzed_days = [];
-    const _ticks = [];
+    for (let shop of selectedShops.map(s => productHistoricalData[s])) {
+      let _minPrice = Math.min(...shop.historicalData.map(d => d.price));
+      let _maxPrice = Math.max(...shop.historicalData.map(d => d.price));
 
-    let result = {};
-    for (let entry of _data) {
-      if (!_analyzed_days.includes(entry.date.slice(0, 10))) {
-        _analyzed_days.push(entry.date.slice(0, 10));
-        _ticks.push(entry.date);
-      }
+      let _minDate = shop.historicalData
+        .map(d => new Date(d.date))
+        .sort((a, b) => a.getTime() - b.getTime())
+        .at(0);
+      let _maxDate = shop.historicalData
+        .map(d => new Date(d.date))
+        .sort((a, b) => a.getTime() - b.getTime())
+        .at(-1);
 
-      if (entry.date in result) {
-        result[entry.date][entry.shop_name] = entry.price_with_shipping;
-      } else {
-        result[entry.date] = {
-          date: entry.date,
-          [entry.shop_name]: entry.price_with_shipping,
-        };
-      }
+      minPrices.push(_minPrice);
+      maxPrices.push(_maxPrice);
+
+      minDates.push(_minDate);
+      maxDates.push(_maxDate);
     }
 
-    setTicks(_ticks);
-    result = Object.values(result);
-    setData(result);
-  }, [productData]);
+    let minPrice = Math.min(...minPrices);
+    let maxPrice = Math.max(...maxPrices);
 
-  if (!data?.length) return;
+    let minDate = minDates.sort((a, b) => a.getTime() - b.getTime()).at(0);
+    let maxDate = maxDates.sort((a, b) => a.getTime() - b.getTime()).at(-1);
 
+    setDomain({ x: [minDate, maxDate], y: [minPrice, maxPrice] });
+  }, [selectedShops]);
+
+  console.log({ domain });
+
+  if (!selectedShops?.length) return;
   return (
     <div
       ref={ref}
@@ -68,29 +72,28 @@ export function LineChart() {
         overflow: "hidden",
       }}
     >
-      <ChartInner
-        // ref={ref}
-        selectedShop={selectedShop}
-        data={data}
-        width={width}
-        height={height}
-      />
+      {domain && (
+        <ChartInner
+          lines={selectedShops.map(s => ({
+            historicalData: productHistoricalData[s].historicalData,
+            color: productHistoricalData[s].color,
+          }))}
+          width={width}
+          height={height}
+          domain={domain}
+        />
+      )}
     </div>
   );
 }
 
-function ChartInner({ data, selectedShop, width, height }) {
-  const _parseDate = date => parse(date, "yyyy-MM-dd'T'HH-mm", new Date());
-
+function ChartInner({ lines, width, height, domain }) {
+  console.log({ domain });
   const [selectedDate, setSelectedDate] = useState([]);
-
-  data = data
-    .slice(50, data.length - 1)
-    .map(e => [_parseDate(e.date), parseFloat(e[selectedShop])])
-    .sort((a, b) => a[0].getTime() - b[0].getTime());
-
-  const [startDay, setStartDay] = useState(startOfMonth(data.at(0)[0]));
-  const [endDay, setEndDay] = useState(endOfMonth(data.at(-1)[0]));
+  const [startDay, setStartDay] = useState(startOfMonth(domain.x[0]));
+  const [endDay, setEndDay] = useState(endOfMonth(domain.x[1]));
+  console.log({ startDay, endDay });
+  console.log({ domain });
 
   let xTicks = eachDayOfInterval({ start: startDay, end: endDay });
 
@@ -108,16 +111,18 @@ function ChartInner({ data, selectedShop, width, height }) {
 
   let yScale = d3
     .scaleLinear()
-    .domain(d3.extent(data.map(d => d[1])))
+    .domain(domain.y)
     .range([height - margin.bottom, margin.top]);
 
   // Inverting the y axis
   let line = d3
     .line()
-    .defined(d => !isNaN(d[1]))
-    .x(d => xScale(d[0]))
-    .y(d => yScale(d[1]));
-  let d = line(data);
+    .defined(d => d["price"])
+    .x(d => xScale(new Date(d["date"])))
+    .y(d => yScale(d["price"]));
+
+  console.log(lines);
+  lines = lines.map(l => ({ color: l.color, line: line(l["historicalData"]) }));
 
   return (
     <svg
@@ -128,18 +133,22 @@ function ChartInner({ data, selectedShop, width, height }) {
       className="chart-inner"
       viewBox={`0 0 ${width} ${height}`}
     >
-      <path d={d} fill="none" stroke="rgb(0, 122, 255)" strokeWidth={2}></path>
+      {lines?.map(l => (
+        <path d={l.line} fill="none" stroke={l.color} strokeWidth={2} />
+      ))}
 
-      {/* Y Axis */}
       {yScale.ticks().map(price => (
         <g transform={`translate(0, ${yScale(price)})`}>
-          <line
-            x1={margin.left}
-            x2={width - margin.right}
-            stroke="#999"
-            strokeWidth={0.5}
-            strokeDasharray="1,3"
-          />
+          {lines.map(l => (
+            <line
+              key={l}
+              x1={margin.left}
+              x2={width}
+              stroke="#999"
+              strokeWidth={0.5}
+              strokeDasharray="1,3"
+            />
+          ))}
           <text
             alignmentBaseline="middle"
             key={price}

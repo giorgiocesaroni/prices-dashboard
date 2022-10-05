@@ -7,6 +7,7 @@
 
 html {
   background: #eee;
+  -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape while allowing user zoom */
 }
 
 body {
@@ -53,7 +54,7 @@ button {
 
 .layout main {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto auto;
   gap: 1rem;
   align-items: start;
 }

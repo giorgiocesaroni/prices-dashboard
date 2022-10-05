@@ -1,6 +1,4 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
-import { SelectedShopAtom } from "../context/recoil/atoms";
 import { LineChart } from "../LineChart";
 import Inspector from "./Inspector";
 import { ProductsSidebar } from "./ProductsSidebar";
@@ -14,10 +12,10 @@ export default function Layout() {
           <LineChart />
         </div>
 
-        <div style={{ display: "grid", gap: "1rem" }}>
-          <ProductsSidebar />
-          <Inspector />
-        </div>
+        {/* <div style={{ display: "grid", gap: "1rem" }}> */}
+        <ProductsSidebar />
+        <Inspector />
+        {/* </div> */}
       </main>
     </div>
   );

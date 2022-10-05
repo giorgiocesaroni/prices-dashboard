@@ -1,18 +1,12 @@
-import { collection, onSnapshot } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { db } from "../config/Firebase";
-import {
-  ProductDataAtom,
-  SelectedProductAtom,
-  SelectedShopAtom,
-} from "../context/recoil/atoms";
+import { AvailableShopsAtom, SelectedShopsAtom } from "../context/recoil/atoms";
 
 export default function Inspector() {
   return (
     <div className="card inspector">
       <h3>Inspector</h3>
-      <Notifications />
+      {/* <Notifications /> */}
       <Rankings />
     </div>
   );
@@ -23,32 +17,33 @@ function Notifications() {
 }
 
 function Rankings() {
-  const selectedProduct = useRecoilValue(SelectedProductAtom);
-  const [selectedShop, setSelectedShop] = useRecoilState(SelectedShopAtom);
-  const [productShops, setProductShops] = useRecoilState(ProductDataAtom);
+  const availableShops = useRecoilValue(AvailableShopsAtom);
+  const [selectedShops, setSelectedShops] = useRecoilState(SelectedShopsAtom);
 
-  useEffect(() => {
-    if (selectedProduct) {
-      const productRef = collection(db, "products", selectedProduct, "idealo");
-      const stop = onSnapshot(productRef, snap => {
-        setProductShops(snap.docs.map(d => d.data()));
-      });
-
-      return () => stop();
-    } else {
-      setProductShops(null);
+  function handleClick(shop) {
+    if (selectedShops.includes(shop)) {
+      return setSelectedShops(prev => prev.filter(s => s !== shop));
     }
-  }, [selectedProduct]);
+
+    setSelectedShops(prev => [...prev, shop]);
+  }
 
   return (
     <div className="shops">
-      Rankings
-      {productShops?.map(s => (
+      <h4>Rankings</h4>
+      {availableShops?.map(s => (
         <button
-          className={`selectable ${selectedShop === s ? "selected" : ""}`}
-          onClick={() => setSelectedShop(s)}
+          onClick={() => handleClick(s.shopName)}
+          className={`selectable ${
+            selectedShops.includes(s.shopName) ? "selected" : ""
+          }`}
+          style={
+            selectedShops.includes(s.shopName)
+              ? { backgroundColor: s.color }
+              : {}
+          }
         >
-          {s["shop_name"]}
+          {s.shopName}
         </button>
       ))}
     </div>

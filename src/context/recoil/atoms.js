@@ -5,14 +5,30 @@ const SelectedProductAtom = atom({
   default: null,
 });
 
-const SelectedShopAtom = atom({
-  key: "SelectedShop",
+const SelectedShopsAtom = atom({
+  key: "SelectedShops",
+  default: [],
+});
+
+const ProductHistoricalData = atom({
+  key: "ProductHistorical",
   default: null,
 });
 
-const ProductDataAtom = atom({
-  key: "ProductData",
+const AvailableShopsAtom = atom({
+  key: "AvailableShops",
   default: null,
 });
 
-export { SelectedProductAtom, SelectedShopAtom, ProductDataAtom };
+const AvailableProductsAtom = atom({
+  key: "AvailableProducts",
+  default: null,
+});
+
+export {
+  SelectedProductAtom,
+  SelectedShopsAtom,
+  ProductHistoricalData,
+  AvailableShopsAtom,
+  AvailableProductsAtom,
+};
