@@ -2,7 +2,11 @@ import { collection, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { db } from "../config/Firebase";
-import { SelectedProductAtom, SelectedShopAtom } from "../context/recoil/atoms";
+import {
+  ProductDataAtom,
+  SelectedProductAtom,
+  SelectedShopAtom,
+} from "../context/recoil/atoms";
 
 export default function Inspector() {
   return (
@@ -21,18 +25,16 @@ function Notifications() {
 function Rankings() {
   const selectedProduct = useRecoilValue(SelectedProductAtom);
   const [selectedShop, setSelectedShop] = useRecoilState(SelectedShopAtom);
-  const [productShops, setProductShops] = useState(null);
+  const [productShops, setProductShops] = useRecoilState(ProductDataAtom);
 
   useEffect(() => {
     if (selectedProduct) {
       const productRef = collection(db, "products", selectedProduct, "idealo");
       const stop = onSnapshot(productRef, snap => {
-        setProductShops(
-          Array.from(new Set(snap.docs.map(d => d.data()["shop_name"])))
-        );
+        setProductShops(snap.docs.map(d => d.data()));
       });
 
-      return stop;
+      return () => stop();
     } else {
       setProductShops(null);
     }
@@ -46,7 +48,7 @@ function Rankings() {
           className={`selectable ${selectedShop === s ? "selected" : ""}`}
           onClick={() => setSelectedShop(s)}
         >
-          {s}
+          {s["shop_name"]}
         </button>
       ))}
     </div>

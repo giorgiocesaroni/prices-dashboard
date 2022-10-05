@@ -1,4 +1,6 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { SelectedShopAtom } from "../context/recoil/atoms";
 import { LineChart } from "../LineChart";
 import Inspector from "./Inspector";
 import { ProductsSidebar } from "./ProductsSidebar";

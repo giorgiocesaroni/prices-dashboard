@@ -4,14 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import useMeasure from "react-use-measure";
 
 import { eachDayOfInterval, endOfMonth, startOfMonth } from "date-fns/esm";
-import iphoneData from "./data/iphone.json";
+import { useRecoilValue } from "recoil";
+import { ProductDataAtom } from "./context/recoil/atoms";
 
-export function LineChart(props) {
+export function LineChart() {
   const [data, setData] = useState([]);
   const [shops, setShops] = useState([]);
   const [selectedShop, setSelectedShop] = useState("Amazon.it");
   const [ticks, setTicks] = useState([]);
   const innerRef = useRef(null);
+
+  const productData = useRecoilValue(ProductDataAtom);
 
   let [ref, bounds] = useMeasure();
   let width = bounds.width;
@@ -19,9 +22,12 @@ export function LineChart(props) {
   console.log({ width, height });
 
   useEffect(() => {
-    const _data = iphoneData;
+    const _data = productData;
+    if (!productData) return;
 
-    const _shops = Array.from(new Set(_data.map(e => e["shop_name"]))).sort();
+    console.log({ productData });
+
+    const _shops = Array.from(new Set(_data?.map(e => e["shop_name"]))).sort();
     setShops(_shops);
 
     const _analyzed_days = [];
@@ -47,9 +53,10 @@ export function LineChart(props) {
     setTicks(_ticks);
     result = Object.values(result);
     setData(result);
-  }, []);
+  }, [productData]);
 
-  if (!data.length) return;
+  if (!data?.length) return;
+
   return (
     <div
       ref={ref}
@@ -60,7 +67,6 @@ export function LineChart(props) {
         maxHeight: "75vh",
         overflow: "hidden",
       }}
-      {...props}
     >
       <ChartInner
         // ref={ref}

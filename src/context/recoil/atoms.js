@@ -10,4 +10,9 @@ const SelectedShopAtom = atom({
   default: null,
 });
 
-export { SelectedProductAtom, SelectedShopAtom };
+const ProductDataAtom = atom({
+  key: "ProductData",
+  default: null,
+});
+
+export { SelectedProductAtom, SelectedShopAtom, ProductDataAtom };
