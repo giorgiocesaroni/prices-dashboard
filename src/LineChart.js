@@ -9,6 +9,7 @@ import {
   ProductHistoricalData,
   SelectedShopsAtom,
 } from "./context/recoil/atoms";
+import Accordion from "./components/Accordion";
 
 export function LineChart() {
   const selectedShops = useRecoilValue(SelectedShopsAtom);
@@ -29,16 +30,16 @@ export function LineChart() {
     let minDates = [];
     let maxDates = [];
 
-    for (let shop of selectedShops.map(s => productHistoricalData[s])) {
-      let _minPrice = Math.min(...shop.historicalData.map(d => d.price));
-      let _maxPrice = Math.max(...shop.historicalData.map(d => d.price));
+    for (let shop of selectedShops.map((s) => productHistoricalData[s])) {
+      let _minPrice = Math.min(...shop.historicalData.map((d) => d.price));
+      let _maxPrice = Math.max(...shop.historicalData.map((d) => d.price));
 
       let _minDate = shop.historicalData
-        .map(d => new Date(d.date))
+        .map((d) => new Date(d.date))
         .sort((a, b) => a.getTime() - b.getTime())
         .at(0);
       let _maxDate = shop.historicalData
-        .map(d => new Date(d.date))
+        .map((d) => new Date(d.date))
         .sort((a, b) => a.getTime() - b.getTime())
         .at(-1);
 
@@ -58,32 +59,23 @@ export function LineChart() {
     setDomain({ x: [minDate, maxDate], y: [minPrice, maxPrice] });
   }, [selectedShops]);
 
-
   if (!selectedShops?.length) return;
   return (
-    <div
-      ref={ref}
-      className="line-chart"
-      style={{
-        maxWidth: "100%",
-        height: "500px",
-        maxHeight: "65vh",
-        minHeight: "65vh",
-        overflow: "hidden",
-      }}
-    >
-      {domain && (
-        <ChartInner
-          lines={selectedShops.map(s => ({
-            historicalData: productHistoricalData[s].historicalData,
-            color: productHistoricalData[s].color,
-          }))}
-          width={width}
-          height={height}
-          domain={domain}
-        />
-      )}
-    </div>
+    <Accordion title="Graph">
+      <div ref={ref} className="line-chart">
+        {domain && (
+          <ChartInner
+            lines={selectedShops.map((s) => ({
+              historicalData: productHistoricalData[s].historicalData,
+              color: productHistoricalData[s].color,
+            }))}
+            width={width}
+            height={height}
+            domain={domain}
+          />
+        )}
+      </div>
+    </Accordion>
   );
 }
 
@@ -100,7 +92,6 @@ function ChartInner({ lines, width, height, domain }) {
 
   const [startDay, setStartDay] = useState(domain.x[0]);
   const [endDay, setEndDay] = useState(domain.x[1]);
-
 
   let xTicks = eachDayOfInterval({ start: startDay, end: endDay });
 
@@ -124,11 +115,14 @@ function ChartInner({ lines, width, height, domain }) {
   // Inverting the y axis
   let line = d3
     .line()
-    .defined(d => d["price"])
-    .x(d => xScale(new Date(d["date"])))
-    .y(d => yScale(d["price"]));
+    .defined((d) => d["price"])
+    .x((d) => xScale(new Date(d["date"])))
+    .y((d) => yScale(d["price"]));
 
-  lines = lines.map(l => ({ color: l.color, line: line(l["historicalData"]) }));
+  lines = lines.map((l) => ({
+    color: l.color,
+    line: line(l["historicalData"]),
+  }));
 
   return (
     <svg
@@ -139,13 +133,13 @@ function ChartInner({ lines, width, height, domain }) {
       className="chart-inner"
       viewBox={`0 0 ${width} ${height}`}
     >
-      {lines?.map(l => (
+      {lines?.map((l) => (
         <path d={l.line} fill="none" stroke={l.color} strokeWidth={2} />
       ))}
 
-      {yScale.ticks().map(price => (
+      {yScale.ticks().map((price) => (
         <g transform={`translate(0, ${yScale(price)})`}>
-          {lines.map(l => (
+          {lines.map((l) => (
             <line
               key={l}
               x1={margin.left}
@@ -172,12 +166,12 @@ function ChartInner({ lines, width, height, domain }) {
             width={xScale(addDays(date, 1)) - xScale(date)}
             height={height}
             opacity={selectedDate.includes(i) ? 0.05 : 0}
-            onMouseDown={e => {
+            onMouseDown={(e) => {
               setSelectedDate([i]);
             }}
-            onMouseEnter={e => {
+            onMouseEnter={(e) => {
               if (e.buttons) {
-                setSelectedDate(prev => prev.concat(i));
+                setSelectedDate((prev) => prev.concat(i));
               }
             }}
             onMouseUp={() => {
