@@ -20,6 +20,11 @@ const AvailableShopsAtom = atom({
   default: null,
 });
 
+const LastUpdateAtom = atom({
+  key: "LastUpdate",
+  default: null,
+});
+
 const AvailableProductsAtom = atom({
   key: "AvailableProducts",
   default: null,
@@ -31,4 +36,5 @@ export {
   ProductHistoricalData,
   AvailableShopsAtom,
   AvailableProductsAtom,
+  LastUpdateAtom
 };

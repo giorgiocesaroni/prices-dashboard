@@ -1,4 +1,4 @@
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import React, { useEffect } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { db } from "../config/Firebase";
@@ -8,6 +8,7 @@ import {
   SelectedShopsAtom,
   AvailableShopsAtom,
   AvailableProductsAtom,
+  LastUpdateAtom,
 } from "../context/recoil/atoms";
 
 const appleColors = [
@@ -36,7 +37,7 @@ export default function Firestore({ children }) {
   const [availableProducts, setAvailableProducts] = useRecoilState(
     AvailableProductsAtom
   );
-  console.log({ availableProducts });
+  const [lastUpdate, setLastUpdate] = useRecoilState(LastUpdateAtom);
 
   useEffect(() => {
     const productsRef = collection(db, "Products");
@@ -49,6 +50,9 @@ export default function Firestore({ children }) {
 
   useEffect(() => {
     resetSelectedShops();
+
+    const comparatorRef = doc(db, `Products/${selectedProduct}/Comparators/Idealo`);
+    getDoc(comparatorRef).then(snap => setLastUpdate(snap.data?.()["last_update"]));
 
     const shopsRef = collection(
       db,

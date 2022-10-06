@@ -29,9 +29,7 @@ export function LineChart() {
     let minDates = [];
     let maxDates = [];
 
-    console.log({ selectedShops, productHistoricalData });
     for (let shop of selectedShops.map(s => productHistoricalData[s])) {
-      console.log(shop);
       let _minPrice = Math.min(...shop.historicalData.map(d => d.price));
       let _maxPrice = Math.max(...shop.historicalData.map(d => d.price));
 
@@ -60,7 +58,6 @@ export function LineChart() {
     setDomain({ x: [minDate, maxDate], y: [minPrice, maxPrice] });
   }, [selectedShops]);
 
-  console.log({ domain });
 
   if (!selectedShops?.length) return;
   return (
@@ -91,7 +88,6 @@ export function LineChart() {
 }
 
 function ChartInner({ lines, width, height, domain }) {
-  console.log({ domain });
   const [selectedDate, setSelectedDate] = useState([]);
 
   const [minPrice, setMinPrice] = useState(domain.y[0]);
@@ -105,8 +101,6 @@ function ChartInner({ lines, width, height, domain }) {
   const [startDay, setStartDay] = useState(domain.x[0]);
   const [endDay, setEndDay] = useState(domain.x[1]);
 
-  console.log({ startDay, endDay });
-  console.log({ domain });
 
   let xTicks = eachDayOfInterval({ start: startDay, end: endDay });
 
@@ -134,7 +128,6 @@ function ChartInner({ lines, width, height, domain }) {
     .x(d => xScale(new Date(d["date"])))
     .y(d => yScale(d["price"]));
 
-  console.log(lines);
   lines = lines.map(l => ({ color: l.color, line: line(l["historicalData"]) }));
 
   return (

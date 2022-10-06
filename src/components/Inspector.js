@@ -1,12 +1,13 @@
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { AvailableShopsAtom, SelectedShopsAtom } from "../context/recoil/atoms";
+import { AvailableShopsAtom, LastUpdateAtom, SelectedShopsAtom } from "../context/recoil/atoms";
 
 export default function Inspector() {
   return (
     <div className="card inspector">
       <h3>Inspector</h3>
       {/* <Notifications /> */}
+      <LastUpdate />
       <Rankings />
     </div>
   );
@@ -14,6 +15,21 @@ export default function Inspector() {
 
 function Notifications() {
   return <div className="notifications">Notifications</div>;
+}
+
+function LastUpdate() {
+  const lastUpdate = useRecoilValue(LastUpdateAtom);
+  console.log(lastUpdate, Date.parse(lastUpdate))
+
+  if (!lastUpdate) return;
+  return (
+      <div className="last-update">
+        <h4>
+          Last Update
+        </h4>
+        <p>{new Date(lastUpdate).toLocaleString()}</p>
+      </div>
+  )
 }
 
 function Rankings() {
