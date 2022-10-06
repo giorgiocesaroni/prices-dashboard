@@ -5,7 +5,7 @@ import {
   SelectedProductAtom,
 } from "../context/recoil/atoms";
 
-export function ProductsSidebar() {
+export function Products() {
   const [availableProducts] = useRecoilState(AvailableProductsAtom);
   const [selectedProduct, setSelectedProduct] =
     useRecoilState(SelectedProductAtom);
@@ -14,22 +14,22 @@ export function ProductsSidebar() {
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    setFilteredProducts(null);
-    if (!searchValue) return;
+    if (!searchValue) return setFilteredProducts(availableProducts);
 
     setFilteredProducts(
       availableProducts.filter(p =>
         p.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
-  }, [searchValue]);
+  }, [searchValue, availableProducts]);
 
   return (
     <div
       className="card products-sidebar"
-      style={{ display: "grid", gap: ".5rem", minWidth: "20rem" }}
+      style={{ display: "grid", gap: ".5rem", width: "20rem" }}
     >
       <div
+        onClick={() => setOpen(prev => !prev)}
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -38,7 +38,6 @@ export function ProductsSidebar() {
       >
         <h3>Products</h3>
         <div
-          onClick={() => setOpen(prev => !prev)}
           style={{
             height: "10px",
             width: "25px",

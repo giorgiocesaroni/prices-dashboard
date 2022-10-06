@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { SelectedProductAtom } from "../context/recoil/atoms";
 import { LineChart } from "../LineChart";
 import Inspector from "./Inspector";
-import { ProductsSidebar } from "./ProductsSidebar";
+import { Products } from "./Products";
 
 export default function Layout() {
   const selectedProduct = useRecoilState(SelectedProductAtom);
@@ -14,11 +14,8 @@ export default function Layout() {
         <div className="card">
           <LineChart />
         </div>
-
-        {/* <div style={{ display: "grid", gap: "1rem" }}> */}
-        <ProductsSidebar />
+        <Products />
         <Inspector />
-        {/* </div> */}
       </main>
     </div>
   );
