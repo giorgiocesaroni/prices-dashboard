@@ -23,7 +23,6 @@ function Notifications() {
 
 function LastUpdate() {
   const lastUpdate = useRecoilValue(LastUpdateAtom);
-  console.log(lastUpdate, Date.parse(lastUpdate));
 
   if (!lastUpdate) return;
   return (

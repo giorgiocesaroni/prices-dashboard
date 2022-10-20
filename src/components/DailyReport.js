@@ -6,7 +6,6 @@ import Accordion from "./Accordion";
 // Reports daily sales stats
 export default function DailyReport() {
   const [dailyReport, setDailyReport] = useState(null);
-  console.log({ dailyReport });
 
   useEffect(() => {
     const dailyReportRef = doc(db, "Reports", "latest_report");

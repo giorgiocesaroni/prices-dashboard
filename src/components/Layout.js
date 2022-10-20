@@ -1,19 +1,17 @@
 import React from "react";
-import { useRecoilState } from "recoil";
-import { SelectedProductAtom } from "../context/recoil/atoms";
-import { LineChart } from "../LineChart";
+import ComparatorReport from "./ComparatorReport";
 import DailyReport from "./DailyReport";
 import Inspector from "./Inspector";
+import { ProductPriceChart } from "./ProductPriceChart";
 import { Products } from "./Products";
 
 export default function Layout() {
-  const selectedProduct = useRecoilState(SelectedProductAtom);
   return (
     <div className="layout">
-      <h2 className="page-title">{selectedProduct ?? "Price Analysis"}</h2>
       <main>
+        <ComparatorReport comparator="Idealo" />
         <DailyReport />
-        <LineChart />
+        <ProductPriceChart />
         <Inspector />
         <Products />
       </main>

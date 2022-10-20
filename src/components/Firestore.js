@@ -41,8 +41,8 @@ export default function Firestore({ children }) {
 
   useEffect(() => {
     const productsRef = collection(db, "Products");
-    const stop = onSnapshot(productsRef, snap =>
-      setAvailableProducts(snap.docs.map(d => d.id))
+    const stop = onSnapshot(productsRef, (snap) =>
+      setAvailableProducts(snap.docs.map((d) => d.id))
     );
 
     return stop;
@@ -51,15 +51,19 @@ export default function Firestore({ children }) {
   useEffect(() => {
     resetSelectedShops();
 
-    const comparatorRef = doc(db, `Products/${selectedProduct}/Comparators/Idealo`);
-    getDoc(comparatorRef).then(snap => setLastUpdate(snap.data?.()["last_update"]));
+    const comparatorRef = doc(
+      db,
+      `Products/${selectedProduct}/Comparators/Idealo`
+    );
+    getDoc(comparatorRef).then((snap) =>
+      setLastUpdate(snap.data?.()["last_update"])
+    );
 
     const shopsRef = collection(
       db,
       `Products/${selectedProduct}/Comparators/Idealo/Shops`
     );
-    const stop = onSnapshot(shopsRef, snap => {
-      console.log("snapped");
+    const stop = onSnapshot(shopsRef, (snap) => {
       const result = {};
       const _availableShops = [];
 
@@ -77,7 +81,7 @@ export default function Firestore({ children }) {
       setProductHistoricalData(result);
 
       setAvailableShops(_availableShops);
-      setSelectedShops(_availableShops.slice(0, 10).map(s => s.shopName));
+      setSelectedShops(_availableShops.slice(0, 10).map((s) => s.shopName));
     });
 
     return stop;
