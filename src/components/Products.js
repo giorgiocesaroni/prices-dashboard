@@ -20,7 +20,7 @@ export function Products() {
 
     setFilteredProducts(
       availableProducts.filter((p) =>
-        p.toLowerCase().includes(searchValue.toLowerCase())
+        p.name.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
   }, [searchValue, availableProducts]);
@@ -36,13 +36,21 @@ export function Products() {
       />
       <div style={{ display: "grid", gap: ".5rem" }}>
         {filteredProducts?.map((p, i) => (
-          <button
-            key={`product${i}`}
-            onClick={() => setSelectedProduct(p)}
-            className={`selectable ${selectedProduct === p ? "selected" : ""}`}
-          >
-            {p}
-          </button>
+          <div className="flex" style={{ gap: ".5rem" }}>
+            <div
+              style={{ flex: 1 }}
+              key={`product${i}`}
+              onClick={() => setSelectedProduct(p.name)}
+              className={`flex selectable ${
+                selectedProduct === p.name ? "selected" : ""
+              }`}
+            >
+              <p>{p.name}</p>
+            </div>
+            {p.overtaken && <p className="stats">⚠️</p>}
+            {p.optimizable && <p className="stats">ℹ️</p>}
+            {p.winning && <p className="stats">🏆</p>}
+          </div>
         ))}
       </div>
     </Accordion>

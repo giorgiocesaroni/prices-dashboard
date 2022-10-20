@@ -10,6 +10,11 @@ const SelectedShopsAtom = atom({
   default: [],
 });
 
+const SelectedComparatorAtom = atom({
+  key: "SelectedComparator",
+  default: "Idealo",
+});
+
 const ProductHistoricalData = atom({
   key: "ProductHistorical",
   default: null,
@@ -36,5 +41,6 @@ export {
   ProductHistoricalData,
   AvailableShopsAtom,
   AvailableProductsAtom,
-  LastUpdateAtom
+  LastUpdateAtom,
+  SelectedComparatorAtom,
 };

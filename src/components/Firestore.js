@@ -9,6 +9,7 @@ import {
   AvailableShopsAtom,
   AvailableProductsAtom,
   LastUpdateAtom,
+  SelectedComparatorAtom,
 } from "../context/recoil/atoms";
 
 const appleColors = [
@@ -27,17 +28,14 @@ const appleColors = [
 ];
 
 export default function Firestore({ children }) {
-  const [productHistoricalData, setProductHistoricalData] = useRecoilState(
-    ProductHistoricalData
-  );
-  const [selectedShops, setSelectedShops] = useRecoilState(SelectedShopsAtom);
+  const [, setProductHistoricalData] = useRecoilState(ProductHistoricalData);
+  const [, setSelectedShops] = useRecoilState(SelectedShopsAtom);
   const resetSelectedShops = useResetRecoilState(SelectedShopsAtom);
   const [selectedProduct] = useRecoilState(SelectedProductAtom);
   const [, setAvailableShops] = useRecoilState(AvailableShopsAtom);
-  const [availableProducts, setAvailableProducts] = useRecoilState(
-    AvailableProductsAtom
-  );
-  const [lastUpdate, setLastUpdate] = useRecoilState(LastUpdateAtom);
+  const [, setAvailableProducts] = useRecoilState(AvailableProductsAtom);
+  const [, setLastUpdate] = useRecoilState(LastUpdateAtom);
+  const [selectedComparator] = useRecoilState(SelectedComparatorAtom);
 
   useEffect(() => {
     const productsRef = collection(db, "Products");
@@ -49,19 +47,51 @@ export default function Firestore({ children }) {
   }, []);
 
   useEffect(() => {
+    const productsRef = collection(db, "Products");
+    const _availableProducts = [];
+
+    const stop = onSnapshot(productsRef, async (snap) => {
+      for (let _doc of snap.docs) {
+        let path = _doc.ref.path;
+        let name = _doc.id;
+
+        let product = { name };
+
+        await getDoc(doc(db, path, "Comparators", selectedComparator)).then(
+          (snap) => {
+            if (snap.exists()) {
+              product = { ...product, ...snap.data() };
+              console.log({ product });
+            }
+          }
+        );
+
+        console.log({ product });
+        _availableProducts.push(product);
+      }
+
+      console.log({ _availableProducts });
+      setAvailableProducts(_availableProducts);
+    });
+
+    return stop;
+  }, [selectedComparator]);
+
+  useEffect(() => {
     resetSelectedShops();
 
     const comparatorRef = doc(
       db,
-      `Products/${selectedProduct}/Comparators/Idealo`
+      `Products/${selectedProduct}/Comparators/${selectedComparator}`
     );
+
     getDoc(comparatorRef).then((snap) =>
       setLastUpdate(snap.data?.()?.["last_update"])
     );
 
     const shopsRef = collection(
       db,
-      `Products/${selectedProduct}/Comparators/Idealo/Shops`
+      `Products/${selectedProduct}/Comparators/${selectedComparator}/Shops`
     );
     const stop = onSnapshot(shopsRef, (snap) => {
       const result = {};
