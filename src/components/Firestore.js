@@ -71,7 +71,6 @@ export default function Firestore({ children }) {
         const shopName = d.id;
         result[shopName] = {
           ...d.data(),
-          color,
         };
 
         _availableShops.push({ shopName, ...d.data() });
