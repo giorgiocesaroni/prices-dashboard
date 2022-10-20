@@ -35,6 +35,7 @@ function LastUpdate() {
 
 function Rankings() {
   const availableShops = useRecoilValue(AvailableShopsAtom);
+  console.log({ availableShops });
   const [selectedShops, setSelectedShops] = useRecoilState(SelectedShopsAtom);
 
   function handleClick(shop) {
@@ -49,19 +50,25 @@ function Rankings() {
     <div className="shops">
       <h4>Rankings</h4>
       {availableShops?.map((s) => (
-        <button
-          onClick={() => handleClick(s.shopName)}
-          className={`selectable ${
-            selectedShops.includes(s.shopName) ? "selected" : ""
-          }`}
-          style={
-            selectedShops.includes(s.shopName)
-              ? { backgroundColor: s.color }
-              : {}
-          }
-        >
-          {s.shopName}
-        </button>
+        <div className="flex">
+          <span className="index">{s.standing}</span>
+          <p
+            onClick={() => handleClick(s.shopName)}
+            className={`selectable ${
+              selectedShops.includes(s.shopName) ? "selected" : ""
+            }`}
+            style={
+              selectedShops.includes(s.shopName)
+                ? { backgroundColor: s.color, flex: 1 }
+                : { flex: 1 }
+            }
+          >
+            {s.shopName}
+          </p>
+          <p className="stats">
+            {s["price_with_shipping"].toFixed(2).toLocaleString("it-IT")}
+          </p>
+        </div>
       ))}
     </div>
   );

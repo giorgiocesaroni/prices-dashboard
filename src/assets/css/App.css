@@ -124,9 +124,27 @@ button {
   justify-content: space-between;
 }
 
+.index {
+  display: inline-flex;
+  font-size: 0.75rem;
+  width: 3ch;
+  aspect-ratio: 1;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+  align-self: center;
+  border-radius: 50%;
+  background: #eee;
+}
+
 /* Utility */
 .grid {
   display: grid;
+  gap: 1rem;
+}
+
+.flex {
+  display: flex;
   gap: 1rem;
 }
 

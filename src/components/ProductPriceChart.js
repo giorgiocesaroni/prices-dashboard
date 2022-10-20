@@ -10,6 +10,7 @@ import { LineChart } from "./LineChart";
 export function ProductPriceChart() {
   const selectedShops = useRecoilValue(SelectedShopsAtom);
   const productHistoricalData = useRecoilValue(ProductHistoricalData);
+  console.log({ productHistoricalData });
   const [domain, setDomain] = useState(null);
 
   // At load, compute domain
@@ -23,14 +24,14 @@ export function ProductPriceChart() {
     let maxDates = [];
 
     for (let shop of selectedShops.map((s) => productHistoricalData[s])) {
-      let _minPrice = Math.min(...shop.historicalData.map((d) => d.price));
-      let _maxPrice = Math.max(...shop.historicalData.map((d) => d.price));
+      let _minPrice = Math.min(...shop["historical_data"].map((d) => d.price));
+      let _maxPrice = Math.max(...shop["historical_data"].map((d) => d.price));
 
-      let _minDate = shop.historicalData
+      let _minDate = shop["historical_data"]
         .map((d) => new Date(d.date))
         .sort((a, b) => a.getTime() - b.getTime())
         .at(0);
-      let _maxDate = shop.historicalData
+      let _maxDate = shop["historical_data"]
         .map((d) => new Date(d.date))
         .sort((a, b) => a.getTime() - b.getTime())
         .at(-1);
@@ -51,6 +52,13 @@ export function ProductPriceChart() {
     setDomain({ x: [minDate, maxDate], y: [minPrice, maxPrice] });
   }, [selectedShops, productHistoricalData]);
 
+  console.log(
+    selectedShops.map((s) => ({
+      data: productHistoricalData[s]["historical_data"],
+      color: productHistoricalData[s].color,
+    }))
+  );
+
   return (
     <Accordion title="Graph">
       <LineChart
@@ -58,7 +66,7 @@ export function ProductPriceChart() {
         xLabel="date"
         yLabel="price"
         lines={selectedShops.map((s) => ({
-          data: productHistoricalData[s].historicalData,
+          data: productHistoricalData[s]["historical_data"],
           color: productHistoricalData[s].color,
         }))}
         domain={domain}

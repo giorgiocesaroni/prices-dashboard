@@ -79,6 +79,8 @@ export function LineChart({
     line: line(l.data),
   }));
 
+  console.log(lines);
+
   return (
     <div ref={ref} className="line-chart" style={{ width, height }}>
       <svg
@@ -87,20 +89,13 @@ export function LineChart({
         viewBox={`0 0 ${_width} ${_height}`}
       >
         {lines?.map((l, i) => (
-          <path
-            key={`line${i}`}
-            d={l.line}
-            fill="none"
-            stroke={l.color}
-            strokeWidth={2}
-          />
+          <path d={l.line} fill="none" stroke={l.color} strokeWidth={2} />
         ))}
 
         {yScale.ticks(4).map((price, i) => (
           <g key={`yTick${i}`} transform={`translate(0, ${yScale(price)})`}>
             {lines.map((l) => (
               <line
-                key={l}
                 x1={margin.left}
                 x2={_width}
                 stroke="#999"
@@ -108,19 +103,14 @@ export function LineChart({
                 strokeDasharray="1,3"
               />
             ))}
-            <text
-              alignmentBaseline="middle"
-              key={price}
-              fill="#999"
-              fontSize={10}
-            >
+            <text alignmentBaseline="middle" fill="#999" fontSize={10}>
               {price}
             </text>
           </g>
         ))}
 
         {xTicks.map((date, i) => (
-          <g key={`xTick${i}`} transform={`translate(${xScale(date)}, 0)`}>
+          <g transform={`translate(${xScale(date)}, 0)`}>
             {/* <rect
               width={xScale(addDays(date, 1)) - xScale(date)}
               height={_height}
@@ -142,7 +132,6 @@ export function LineChart({
             <text
               y={_height}
               alignmentBaseline="bottom"
-              key={date}
               fill="#999"
               fontSize={10}
             >

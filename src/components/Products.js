@@ -8,6 +8,7 @@ import Accordion from "./Accordion";
 
 export function Products() {
   const [availableProducts] = useRecoilState(AvailableProductsAtom);
+  console.log({ availableProducts });
   const [selectedProduct, setSelectedProduct] =
     useRecoilState(SelectedProductAtom);
   const [searchValue, setSearchValue] = useState("");
