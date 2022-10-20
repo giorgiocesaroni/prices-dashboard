@@ -56,7 +56,7 @@ export default function Firestore({ children }) {
       `Products/${selectedProduct}/Comparators/Idealo`
     );
     getDoc(comparatorRef).then((snap) =>
-      setLastUpdate(snap.data?.()["last_update"])
+      setLastUpdate(snap.data?.()?.["last_update"])
     );
 
     const shopsRef = collection(

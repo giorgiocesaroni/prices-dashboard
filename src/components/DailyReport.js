@@ -37,9 +37,15 @@ export default function DailyReport() {
           <h4>Rankings</h4>
           <div style={{ display: "grid", gap: "1rem" }}>
             {dailyReport.rankings.map((r, i) => (
-              <div className="stats" style={{ display: "grid", gap: "1rem" }}>
+              <div
+                key={`dailyReport${i}`}
+                className="stats"
+                style={{ display: "grid", gap: "1rem" }}
+              >
                 <div className="stat">
-                  <p className="stat-value">{r["product_name"]}</p>
+                  <p className="stat-value" style={{ fontWeight: "bold" }}>
+                    {r["product_name"]}
+                  </p>
                 </div>
 
                 <div className="stat">

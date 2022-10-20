@@ -34,8 +34,9 @@ export function Products() {
         style={{ width: "100%" }}
       />
       <div style={{ display: "grid", gap: ".5rem" }}>
-        {filteredProducts?.map((p) => (
+        {filteredProducts?.map((p, i) => (
           <button
+            key={`product${i}`}
             onClick={() => setSelectedProduct(p)}
             className={`selectable ${selectedProduct === p ? "selected" : ""}`}
           >

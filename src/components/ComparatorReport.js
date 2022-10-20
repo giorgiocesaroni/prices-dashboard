@@ -7,6 +7,7 @@ import { LineChart } from "./LineChart";
 // Reports general stats over our presence on a comparator
 export default function ComparatorReport({ comparator }) {
   const [comparatorReport, setComparatorReport] = useState(null);
+  console.log({ comparatorReport });
 
   useEffect(() => {
     const comparatorReportRef = doc(
@@ -27,7 +28,15 @@ export default function ComparatorReport({ comparator }) {
     <Accordion title={`${comparator} Report`}>
       <div className="grid gap-2">
         <div className="module">
-          <h4>Dominance</h4>
+          <div
+            className="module-header"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <h4>Dominance</h4>
+            <p className="stats">{`${
+              comparatorReport.dominance.at(-1).dominance * 100
+            }%`}</p>
+          </div>
           <LineChart
             title="Idealo Dominance"
             xLabel="date"
@@ -53,7 +62,15 @@ export default function ComparatorReport({ comparator }) {
         </div>
 
         <div className="module">
-          <h4>Avg. Profit Margin</h4>
+          <div
+            className="module-header"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <h4>Avg. Profit Margin</h4>
+            <p className="stats">{`${
+              comparatorReport.average_margin.at(-1).average_profit_margin
+            }%`}</p>
+          </div>
           <LineChart
             title="Idealo Average Profit Margin"
             xLabel="date"

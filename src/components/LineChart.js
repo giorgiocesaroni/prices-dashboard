@@ -86,12 +86,18 @@ export function LineChart({
         className="chart-inner"
         viewBox={`0 0 ${_width} ${_height}`}
       >
-        {lines?.map((l) => (
-          <path d={l.line} fill="none" stroke={l.color} strokeWidth={2} />
+        {lines?.map((l, i) => (
+          <path
+            key={`line${i}`}
+            d={l.line}
+            fill="none"
+            stroke={l.color}
+            strokeWidth={2}
+          />
         ))}
 
-        {yScale.ticks(4).map((price) => (
-          <g transform={`translate(0, ${yScale(price)})`}>
+        {yScale.ticks(4).map((price, i) => (
+          <g key={`yTick${i}`} transform={`translate(0, ${yScale(price)})`}>
             {lines.map((l) => (
               <line
                 key={l}
@@ -114,7 +120,7 @@ export function LineChart({
         ))}
 
         {xTicks.map((date, i) => (
-          <g transform={`translate(${xScale(date)}, 0)`}>
+          <g key={`xTick${i}`} transform={`translate(${xScale(date)}, 0)`}>
             {/* <rect
               width={xScale(addDays(date, 1)) - xScale(date)}
               height={_height}
