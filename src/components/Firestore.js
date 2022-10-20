@@ -71,10 +71,12 @@ export default function Firestore({ children }) {
         const shopName = d.id;
         result[shopName] = {
           ...d.data(),
+          color: appleColors[d.data().standing % appleColors.length],
         };
 
         _availableShops.push({ shopName, ...d.data() });
       });
+
       setProductHistoricalData(result);
 
       setAvailableShops(
@@ -82,6 +84,7 @@ export default function Firestore({ children }) {
           .sort((a, b) => a.standing - b.standing)
           .map((e, i) => ({ ...e, color: appleColors[i % appleColors.length] }))
       );
+
       setSelectedShops(_availableShops.slice(0, 10).map((s) => s.shopName));
     });
 

@@ -52,6 +52,7 @@ export function ProductPriceChart() {
     setDomain({ x: [minDate, maxDate], y: [minPrice, maxPrice] });
   }, [selectedShops, productHistoricalData]);
 
+  console.log({ productHistoricalData });
   console.log(
     selectedShops.map((s) => ({
       data: productHistoricalData[s]["historical_data"],

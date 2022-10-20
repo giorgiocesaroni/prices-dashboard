@@ -53,10 +53,7 @@ export default function ComparatorReport({ comparator }) {
                 new Date(comparatorReport.dominance.at(0).date),
                 new Date(comparatorReport.dominance.at(-1).date),
               ],
-              y: [
-                Math.min(...comparatorReport.dominance.map((e) => e.dominance)),
-                Math.max(...comparatorReport.dominance.map((e) => e.dominance)),
-              ],
+              y: [0, 1],
             }}
           />
         </div>
