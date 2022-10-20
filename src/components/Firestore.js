@@ -69,18 +69,19 @@ export default function Firestore({ children }) {
 
       snap.docs.forEach((d, i) => {
         const shopName = d.id;
-        const color = appleColors[i % appleColors.length];
         result[shopName] = {
           ...d.data(),
           color,
         };
 
-        _availableShops.push({ shopName, ...d.data(), color });
+        _availableShops.push({ shopName, ...d.data() });
       });
       setProductHistoricalData(result);
 
       setAvailableShops(
-        _availableShops.sort((a, b) => a.standing - b.standing)
+        _availableShops
+          .sort((a, b) => a.standing - b.standing)
+          .map((e, i) => ({ ...e, color: appleColors[i % appleColors.length] }))
       );
       setSelectedShops(_availableShops.slice(0, 10).map((s) => s.shopName));
     });
