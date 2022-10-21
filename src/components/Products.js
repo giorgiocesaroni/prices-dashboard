@@ -8,7 +8,6 @@ import Accordion from "./Accordion";
 
 export function Products() {
   const [availableProducts] = useRecoilState(AvailableProductsAtom);
-  console.log({ availableProducts });
   const [selectedProduct, setSelectedProduct] =
     useRecoilState(SelectedProductAtom);
   const [searchValue, setSearchValue] = useState("");
@@ -48,8 +47,6 @@ export function Products() {
 
     setSearchProperties(property);
   }
-
-  console.log({ searchProperties });
 
   return (
     <Accordion title="Products" className="products">

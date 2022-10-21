@@ -79,8 +79,6 @@ export function LineChart({
     line: line(l.data),
   }));
 
-  console.log(lines);
-
   return (
     <div ref={ref} className="line-chart" style={{ width, height }}>
       <svg

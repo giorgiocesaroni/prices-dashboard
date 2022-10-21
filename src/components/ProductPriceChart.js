@@ -10,7 +10,6 @@ import { LineChart } from "./LineChart";
 export function ProductPriceChart() {
   const selectedShops = useRecoilValue(SelectedShopsAtom);
   const productHistoricalData = useRecoilValue(ProductHistoricalData);
-  console.log({ productHistoricalData });
   const [domain, setDomain] = useState(null);
 
   // At load, compute domain
@@ -51,14 +50,6 @@ export function ProductPriceChart() {
 
     setDomain({ x: [minDate, maxDate], y: [minPrice, maxPrice] });
   }, [selectedShops, productHistoricalData]);
-
-  console.log({ productHistoricalData });
-  console.log(
-    selectedShops.map((s) => ({
-      data: productHistoricalData[s]["historical_data"],
-      color: productHistoricalData[s].color,
-    }))
-  );
 
   return (
     <Accordion title="Graph">

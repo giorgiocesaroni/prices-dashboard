@@ -35,7 +35,6 @@ function LastUpdate() {
 
 function Rankings() {
   const availableShops = useRecoilValue(AvailableShopsAtom);
-  console.log({ availableShops });
   const [selectedShops, setSelectedShops] = useRecoilState(SelectedShopsAtom);
 
   function handleClick(shop) {

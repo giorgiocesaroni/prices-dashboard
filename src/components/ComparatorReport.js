@@ -7,7 +7,6 @@ import { LineChart } from "./LineChart";
 // Reports general stats over our presence on a comparator
 export default function ComparatorReport({ comparator }) {
   const [comparatorReport, setComparatorReport] = useState(null);
-  console.log({ comparatorReport });
 
   useEffect(() => {
     const comparatorReportRef = doc(

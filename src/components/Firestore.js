@@ -1,15 +1,21 @@
-import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
-import React, { useEffect } from "react";
+import {
+  collection,
+  collectionGroup,
+  doc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { useEffect } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { db } from "../config/Firebase";
 import {
+  AvailableProductsAtom,
+  AvailableShopsAtom,
+  LastUpdateAtom,
   ProductHistoricalData,
+  SelectedComparatorAtom,
   SelectedProductAtom,
   SelectedShopsAtom,
-  AvailableShopsAtom,
-  AvailableProductsAtom,
-  LastUpdateAtom,
-  SelectedComparatorAtom,
 } from "../context/recoil/atoms";
 
 const appleColors = [
@@ -38,43 +44,20 @@ export default function Firestore({ children }) {
   const [selectedComparator] = useRecoilState(SelectedComparatorAtom);
 
   useEffect(() => {
-    const productsRef = collection(db, "Products");
-    const stop = onSnapshot(productsRef, (snap) =>
-      setAvailableProducts(snap.docs.map((d) => d.id))
-    );
+    const comparators = collectionGroup(db, "Comparators");
 
-    return stop;
-  }, []);
+    return onSnapshot(comparators, (snap) => {
+      let availableProducts = [];
 
-  useEffect(() => {
-    const productsRef = collection(db, "Products");
-    const _availableProducts = [];
+      snap.docs.forEach((doc) => {
+        let data = doc.data();
+        let parentProduct = doc.ref.parent.parent.id;
 
-    const stop = onSnapshot(productsRef, async (snap) => {
-      for (let _doc of snap.docs) {
-        let path = _doc.ref.path;
-        let name = _doc.id;
+        availableProducts.push({ name: parentProduct, ...data });
+      });
 
-        let product = { name };
-
-        await getDoc(doc(db, path, "Comparators", selectedComparator)).then(
-          (snap) => {
-            if (snap.exists()) {
-              product = { ...product, ...snap.data() };
-              console.log({ product });
-            }
-          }
-        );
-
-        console.log({ product });
-        _availableProducts.push(product);
-      }
-
-      console.log({ _availableProducts });
-      setAvailableProducts(_availableProducts);
+      setAvailableProducts(availableProducts);
     });
-
-    return stop;
   }, [selectedComparator]);
 
   useEffect(() => {
