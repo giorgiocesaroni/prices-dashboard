@@ -53,7 +53,7 @@ export function Products() {
       <div className="grid">
         <div className="grid">
           <h4>Filters</h4>
-          <div className="flex">
+          <div className="flex" style={{ flexWrap: "wrap", gap: ".5rem" }}>
             <p
               onClick={() => handleSearchProperties("overtaken")}
               className={`selectable stats ${
