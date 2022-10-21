@@ -16,6 +16,7 @@ export function Products() {
 
   useEffect(() => {
     if (!searchValue) return setFilteredProducts(availableProducts);
+
     setFilteredProducts(
       availableProducts.filter((p) =>
         p.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -63,7 +64,8 @@ export function Products() {
                 searchProperties.includes("overtaken") ? " selected" : ""
               }`}
             >
-              ⚠️ Overtaken
+              ⚠️ Overtaken (
+              {availableProducts?.filter((e) => e.overtaken).length})
             </p>
             <p
               onClick={() => handleSearchProperties("winning")}
@@ -71,7 +73,7 @@ export function Products() {
                 searchProperties.includes("winning") ? " selected" : ""
               }`}
             >
-              🏆 Winning
+              🏆 Winning ({availableProducts?.filter((e) => e.winning).length})
             </p>
             <p
               onClick={() => handleSearchProperties("optimizable")}
@@ -79,7 +81,8 @@ export function Products() {
                 searchProperties.includes("optimizable") ? " selected" : ""
               }`}
             >
-              ℹ️ Optimizable
+              ℹ️ Optimizable (
+              {availableProducts?.filter((e) => e.optimizable).length})
             </p>
             <p
               onClick={() => handleSearchProperties("opportunity")}
@@ -87,7 +90,8 @@ export function Products() {
                 searchProperties.includes("opportunity") ? " selected" : ""
               }`}
             >
-              💡 Opportunity
+              💡 Opportunity (
+              {availableProducts?.filter((e) => e.opportunity).length})
             </p>
             <p
               onClick={() => handleSearchProperties("disappeared")}
@@ -95,7 +99,8 @@ export function Products() {
                 searchProperties.includes("disappeared") ? " selected" : ""
               }`}
             >
-              🚫 Disappeared
+              🚫 Disappeared (
+              {availableProducts?.filter((e) => e.disappeared).length})
             </p>
           </div>
           <input
