@@ -1,24 +1,39 @@
+/* Imports */
+@import url("./apple-colors.css");
+
+:root {
+  --app-background: #eee;
+  --main-background: #fff;
+  --paragraph-text-color: #444;
+  --paragraph-text-inverted-color: #444;
+  --paragraph-text-alt-color: #666;
+}
+
 /* Reset */
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 html {
-  background: #eee;
+  background: var(--app-background);
   -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape while allowing user zoom */
 }
 
 body {
   padding: 1rem;
   padding-bottom: 2rem;
+  color: var(--paragraph-text-color);
 }
 
 .App {
-  background: white;
+  background: var(--main-background);
 }
 
+/* Typography */
 h1,
 h2 {
   margin-bottom: 1.5rem;
@@ -30,7 +45,6 @@ h4 {
 
 p {
   font-size: 12px;
-  /* color: #999; */
 }
 
 button {
@@ -45,15 +59,14 @@ button {
 /* Components */
 .selectable {
   font-size: 12px;
-  background: #eee;
-  color: #999;
-  background-color: #eee;
+  background: var(--app-background);
+  color: var(--paragraph-text-alt-color);
   padding: 0.5rem;
   border-radius: 0.5rem;
 }
 
 .selectable.selected {
-  background: rgb(0, 122, 255);
+  background: var(--blue);
   color: white;
 }
 
@@ -81,8 +94,6 @@ button {
 }
 
 .line-chart {
-  /* max-width: 100%; */
-  /* height: 15rem; */
   overflow: hidden;
 }
 
