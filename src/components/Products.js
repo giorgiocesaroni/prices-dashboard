@@ -11,9 +11,8 @@ export function Products() {
   const [selectedProduct, setSelectedProduct] =
     useRecoilState(SelectedProductAtom);
   const [searchValue, setSearchValue] = useState("");
-  const [searchProperties, setSearchProperties] = useState("");
+  const [searchProperties, setSearchProperties] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState(availableProducts);
-  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     if (!searchValue) return setFilteredProducts(availableProducts);
@@ -25,23 +24,31 @@ export function Products() {
   }, [searchValue, availableProducts]);
 
   useEffect(() => {
-    if (!searchProperties) return setFilteredProducts(availableProducts);
-    setFilteredProducts(availableProducts.filter((p) => p?.[searchProperties]));
+    if (!searchProperties.length) return setFilteredProducts(availableProducts);
+
+    const _filteredProducts = [];
+
+    // Filter by multiple filters
+    for (let product of availableProducts) {
+      const outcomes = searchProperties.map((property) => product[property]);
+      // If product answers all the search properties
+      if (outcomes.some((e) => e)) {
+        _filteredProducts.push(product);
+      }
+    }
+
+    console.debug({ _filteredProducts, searchProperties });
+    setFilteredProducts(_filteredProducts);
   }, [searchProperties, availableProducts]);
 
   function handleSearchProperties(property) {
-    // let _searchProperties = searchProperties;
-    // if (_searchProperties.includes(property)) {
-    //   return setSearchProperties(
-    //     _searchProperties.filter((e) => e !== property)
-    //   );
-    // }
-
-    // _searchProperties.push(property);
-    // setSearchProperties(_searchProperties);
-    if (property === searchProperties) return setSearchProperties(null);
-
-    setSearchProperties(property);
+    setSearchProperties((prev) => {
+      if (!prev.includes(property)) {
+        return [...prev, property];
+      } else {
+        return prev.filter((e) => e !== property);
+      }
+    });
   }
 
   return (
@@ -53,7 +60,7 @@ export function Products() {
             <p
               onClick={() => handleSearchProperties("overtaken")}
               className={`selectable stats ${
-                searchProperties === "overtaken" ? " selected" : ""
+                searchProperties.includes("overtaken") ? " selected" : ""
               }`}
             >
               ⚠️ Overtaken
@@ -61,7 +68,7 @@ export function Products() {
             <p
               onClick={() => handleSearchProperties("winning")}
               className={`selectable stats ${
-                searchProperties === "winning" ? " selected" : ""
+                searchProperties.includes("winning") ? " selected" : ""
               }`}
             >
               🏆 Winning
@@ -69,7 +76,7 @@ export function Products() {
             <p
               onClick={() => handleSearchProperties("optimizable")}
               className={`selectable stats ${
-                searchProperties === "optimizable" ? " selected" : ""
+                searchProperties.includes("optimizable") ? " selected" : ""
               }`}
             >
               ℹ️ Optimizable
@@ -77,7 +84,7 @@ export function Products() {
             <p
               onClick={() => handleSearchProperties("opportunity")}
               className={`selectable stats ${
-                searchProperties === "opportunity" ? " selected" : ""
+                searchProperties.includes("opportunity") ? " selected" : ""
               }`}
             >
               💡 Opportunity
@@ -85,7 +92,7 @@ export function Products() {
             <p
               onClick={() => handleSearchProperties("disappeared")}
               className={`selectable stats ${
-                searchProperties === "disappeared" ? " selected" : ""
+                searchProperties.includes("disappeared") ? " selected" : ""
               }`}
             >
               🚫 Disappeared
