@@ -31,7 +31,7 @@ export function Products() {
     if (!searchProperties) return setFilteredProducts(availableProducts);
 
     setFilteredProducts(availableProducts.filter((p) => p?.[searchProperties]));
-  }, [searchProperties]);
+  }, [searchProperties, availableProducts]);
 
   function handleSearchProperties(property) {
     // let _searchProperties = searchProperties;
@@ -86,6 +86,14 @@ export function Products() {
             >
               💡 Opportunity
             </p>
+            <p
+              onClick={() => handleSearchProperties("disappeared")}
+              className={`selectable stats ${
+                searchProperties === "disappeared" ? " selected" : ""
+              }`}
+            >
+              🚫 Disappeared
+            </p>
           </div>
           <input
             value={searchValue}
@@ -109,6 +117,7 @@ export function Products() {
               >
                 <p>{p.name}</p>
               </div>
+              {p.disappeared && <p className="stats">🚫</p>}
               {p.overtaken && <p className="stats">⚠️</p>}
               {p.winning && <p className="stats">🏆</p>}
               {p.optimizable && <p className="stats">ℹ️</p>}
