@@ -78,6 +78,14 @@ export function Products() {
             >
               ℹ️ Optimizable
             </p>
+            <p
+              onClick={() => handleSearchProperties("opportunity")}
+              className={`selectable stats ${
+                searchProperties === "opportunity" ? " selected" : ""
+              }`}
+            >
+              💡 Opportunity
+            </p>
           </div>
           <input
             value={searchValue}
@@ -104,6 +112,7 @@ export function Products() {
               {p.overtaken && <p className="stats">⚠️</p>}
               {p.winning && <p className="stats">🏆</p>}
               {p.optimizable && <p className="stats">ℹ️</p>}
+              {p.opportunity && <p className="stats">💡</p>}
             </div>
           ))}
         </div>
