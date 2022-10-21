@@ -37,12 +37,12 @@ function Rankings() {
   const availableShops = useRecoilValue(AvailableShopsAtom);
   const [selectedShops, setSelectedShops] = useRecoilState(SelectedShopsAtom);
 
-  function handleClick(shop) {
-    if (selectedShops.includes(shop)) {
-      return setSelectedShops((prev) => prev.filter((s) => s !== shop));
+  function handleClick(shopName) {
+    if (selectedShops.includes(shopName)) {
+      return setSelectedShops((prev) => prev.filter((s) => s !== shopName));
     }
 
-    setSelectedShops((prev) => [...prev, shop]);
+    setSelectedShops((prev) => [...prev, shopName]);
   }
 
   return (
@@ -52,12 +52,12 @@ function Rankings() {
         <div className="flex">
           <span className="index">{s.standing}</span>
           <p
-            onClick={() => handleClick(s.shopName)}
+            onClick={() => handleClick(s)}
             className={`selectable ${
-              selectedShops.includes(s.shopName) ? "selected" : ""
+              selectedShops.includes(s) ? "selected" : ""
             }`}
             style={
-              selectedShops.includes(s.shopName)
+              selectedShops.includes(s)
                 ? { backgroundColor: s.color, flex: 1 }
                 : { flex: 1 }
             }

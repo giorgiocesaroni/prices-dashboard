@@ -11,14 +11,12 @@ export function Products() {
   const [selectedProduct, setSelectedProduct] =
     useRecoilState(SelectedProductAtom);
   const [searchValue, setSearchValue] = useState("");
-  const [searchProperties, setSearchProperties] = useState([]);
+  const [searchProperties, setSearchProperties] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(availableProducts);
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
     if (!searchValue) return setFilteredProducts(availableProducts);
-    setSearchProperties(null);
-
     setFilteredProducts(
       availableProducts.filter((p) =>
         p.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -27,9 +25,7 @@ export function Products() {
   }, [searchValue, availableProducts]);
 
   useEffect(() => {
-    if (!availableProducts) return;
     if (!searchProperties) return setFilteredProducts(availableProducts);
-
     setFilteredProducts(availableProducts.filter((p) => p?.[searchProperties]));
   }, [searchProperties, availableProducts]);
 

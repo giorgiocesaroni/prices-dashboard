@@ -22,7 +22,9 @@ export function ProductPriceChart() {
     let minDates = [];
     let maxDates = [];
 
-    for (let shop of selectedShops.map((s) => productHistoricalData[s])) {
+    for (let shop of selectedShops.map(
+      (s) => productHistoricalData[s.shopName]
+    )) {
       let _minPrice = Math.min(...shop["historical_data"].map((d) => d.price));
       let _maxPrice = Math.max(...shop["historical_data"].map((d) => d.price));
 
@@ -58,8 +60,8 @@ export function ProductPriceChart() {
         xLabel="date"
         yLabel="price"
         lines={selectedShops.map((s) => ({
-          data: productHistoricalData[s]["historical_data"],
-          color: productHistoricalData[s].color,
+          data: productHistoricalData[s.shopName]["historical_data"],
+          color: s.color,
         }))}
         domain={domain}
       />
