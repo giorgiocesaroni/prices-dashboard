@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/prices-dashboard/static/css/main.ce8622c9.css",
-    "main.js": "/prices-dashboard/static/js/main.7912e50c.js",
+    "main.js": "/prices-dashboard/static/js/main.f6e69679.js",
     "index.html": "/prices-dashboard/index.html",
     "main.ce8622c9.css.map": "/prices-dashboard/static/css/main.ce8622c9.css.map",
-    "main.7912e50c.js.map": "/prices-dashboard/static/js/main.7912e50c.js.map"
+    "main.f6e69679.js.map": "/prices-dashboard/static/js/main.f6e69679.js.map"
   },
   "entrypoints": [
     "static/css/main.ce8622c9.css",
-    "static/js/main.7912e50c.js"
+    "static/js/main.f6e69679.js"
   ]
 }
