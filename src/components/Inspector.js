@@ -35,6 +35,7 @@ function LastUpdate() {
 
 function Rankings() {
   const availableShops = useRecoilValue(AvailableShopsAtom);
+  console.log({ availableShops });
   const [selectedShops, setSelectedShops] = useRecoilState(SelectedShopsAtom);
 
   function handleClick(shopName) {
@@ -48,27 +49,54 @@ function Rankings() {
   return (
     <div className="shops">
       <h4>Rankings</h4>
-      {availableShops?.map((s) => (
-        <div className="flex">
-          <span className="index">{s.standing}</span>
-          <p
-            onClick={() => handleClick(s)}
-            className={`selectable ${
-              selectedShops.includes(s) ? "selected" : ""
-            }`}
-            style={
-              selectedShops.includes(s)
-                ? { backgroundColor: s.color, flex: 1 }
-                : { flex: 1 }
-            }
-          >
-            {s.shopName}
-          </p>
-          <p className="stats">
-            {s["price_with_shipping"].toFixed(2).toLocaleString("it-IT")}
-          </p>
-        </div>
-      ))}
+      {/* Online shops */}
+      {availableShops
+        ?.filter((s) => s.online)
+        .map((s) => (
+          <div className="flex">
+            <span className="index">{s.standing}</span>
+            <p
+              onClick={() => handleClick(s)}
+              className={`selectable ${
+                selectedShops.includes(s) ? "selected" : ""
+              }`}
+              style={
+                selectedShops.includes(s)
+                  ? { backgroundColor: s.color, flex: 1 }
+                  : { flex: 1 }
+              }
+            >
+              {s.shopName}
+            </p>
+            <p className="stats">
+              {s["price_with_shipping"].toFixed(2).toLocaleString("it-IT")}
+            </p>
+          </div>
+        ))}
+
+      {/* Offline shops */}
+      {availableShops
+        ?.filter((s) => !s.online)
+        .map((s) => (
+          <div className="flex" style={{ opacity: 0.5 }}>
+            <p
+              onClick={() => handleClick(s)}
+              className={`selectable ${
+                selectedShops.includes(s) ? "selected" : ""
+              }`}
+              style={
+                selectedShops.includes(s)
+                  ? { backgroundColor: s.color, flex: 1 }
+                  : { flex: 1 }
+              }
+            >
+              {s.shopName}
+            </p>
+            <p className="stats">
+              {s["price_with_shipping"].toFixed(2).toLocaleString("it-IT")}
+            </p>
+          </div>
+        ))}
     </div>
   );
 }

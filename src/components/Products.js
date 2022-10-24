@@ -30,15 +30,16 @@ export function Products() {
     const _filteredProducts = [];
 
     // Filter by multiple filters
-    for (let product of availableProducts) {
-      const outcomes = searchProperties.map((property) => product[property]);
-      // If product answers all the search properties
-      if (outcomes.some((e) => e)) {
-        _filteredProducts.push(product);
+    if (availableProducts) {
+      for (let product of availableProducts) {
+        const outcomes = searchProperties.map((property) => product[property]);
+        // If product answers all the search properties
+        if (outcomes.some((e) => e)) {
+          _filteredProducts.push(product);
+        }
       }
     }
 
-    console.debug({ _filteredProducts, searchProperties });
     setFilteredProducts(_filteredProducts);
   }, [searchProperties, availableProducts]);
 
@@ -59,6 +60,15 @@ export function Products() {
           <h4>Filters</h4>
           <div className="flex" style={{ flexWrap: "wrap", gap: ".5rem" }}>
             <p
+              onClick={() => handleSearchProperties("online")}
+              className={`selectable stats ${
+                !searchProperties.includes("online") ? " selected" : ""
+              }`}
+            >
+              🚫 Offline ({availableProducts?.filter((e) => !e.online).length})
+            </p>
+
+            <p
               onClick={() => handleSearchProperties("overtaken")}
               className={`selectable stats ${
                 searchProperties.includes("overtaken") ? " selected" : ""
@@ -67,6 +77,7 @@ export function Products() {
               ⚠️ Overtaken (
               {availableProducts?.filter((e) => e.overtaken).length})
             </p>
+
             <p
               onClick={() => handleSearchProperties("winning")}
               className={`selectable stats ${
@@ -75,6 +86,7 @@ export function Products() {
             >
               🏆 Winning ({availableProducts?.filter((e) => e.winning).length})
             </p>
+
             <p
               onClick={() => handleSearchProperties("optimizable")}
               className={`selectable stats ${
@@ -84,6 +96,7 @@ export function Products() {
               ℹ️ Optimizable (
               {availableProducts?.filter((e) => e.optimizable).length})
             </p>
+
             <p
               onClick={() => handleSearchProperties("opportunity")}
               className={`selectable stats ${
@@ -92,15 +105,6 @@ export function Products() {
             >
               💡 Opportunity (
               {availableProducts?.filter((e) => e.opportunity).length})
-            </p>
-            <p
-              onClick={() => handleSearchProperties("disappeared")}
-              className={`selectable stats ${
-                searchProperties.includes("disappeared") ? " selected" : ""
-              }`}
-            >
-              🚫 Disappeared (
-              {availableProducts?.filter((e) => e.disappeared).length})
             </p>
           </div>
           <input
@@ -125,7 +129,7 @@ export function Products() {
               >
                 <p>{p.name}</p>
               </div>
-              {p.disappeared && <p className="stats">🚫</p>}
+              {!p.online && <p className="stats">🚫</p>}
               {p.overtaken && <p className="stats">⚠️</p>}
               {p.winning && <p className="stats">🏆</p>}
               {p.optimizable && <p className="stats">ℹ️</p>}

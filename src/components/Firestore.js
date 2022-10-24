@@ -39,7 +39,9 @@ export default function Firestore({ children }) {
   const resetSelectedShops = useResetRecoilState(SelectedShopsAtom);
   const [selectedProduct] = useRecoilState(SelectedProductAtom);
   const [, setAvailableShops] = useRecoilState(AvailableShopsAtom);
-  const [, setAvailableProducts] = useRecoilState(AvailableProductsAtom);
+  const [availableProducts, setAvailableProducts] = useRecoilState(
+    AvailableProductsAtom
+  );
   const [, setLastUpdate] = useRecoilState(LastUpdateAtom);
   const [selectedComparator] = useRecoilState(SelectedComparatorAtom);
 
@@ -84,7 +86,7 @@ export default function Firestore({ children }) {
         const shopName = d.id;
         result[shopName] = {
           ...d.data(),
-          color: appleColors[d.data().standing - 1 % appleColors.length],
+          color: appleColors[d.data().standing - (1 % appleColors.length)],
         };
 
         _availableShops.push({ shopName, ...d.data() });
@@ -94,7 +96,10 @@ export default function Firestore({ children }) {
 
       _availableShops = _availableShops
         .sort((a, b) => a.standing - b.standing)
-        .map((e, i) => ({ ...e, color: appleColors[e.standing - 1 % appleColors.length] }));
+        .map((e, i) => ({
+          ...e,
+          color: appleColors[e.standing - (1 % appleColors.length)],
+        }));
 
       setAvailableShops(_availableShops);
       setSelectedShops(_availableShops.slice(0, 10));
