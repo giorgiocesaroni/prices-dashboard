@@ -60,15 +60,6 @@ export function Products() {
           <h4>Filters</h4>
           <div className="flex" style={{ flexWrap: "wrap", gap: ".5rem" }}>
             <p
-              onClick={() => handleSearchProperties("online")}
-              className={`selectable stats ${
-                !searchProperties.includes("online") ? " selected" : ""
-              }`}
-            >
-              🚫 Offline ({availableProducts?.filter((e) => !e.online).length})
-            </p>
-
-            <p
               onClick={() => handleSearchProperties("overtaken")}
               className={`selectable stats ${
                 searchProperties.includes("overtaken") ? " selected" : ""
@@ -105,6 +96,14 @@ export function Products() {
             >
               💡 Opportunity (
               {availableProducts?.filter((e) => e.opportunity).length})
+            </p>
+            <p
+              onClick={() => handleSearchProperties("online")}
+              className={`selectable stats ${
+                !searchProperties.includes("online") ? " selected" : ""
+              }`}
+            >
+              🚫 Offline ({availableProducts?.filter((e) => !e.online).length})
             </p>
           </div>
           <input
